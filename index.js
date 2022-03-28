@@ -28,8 +28,21 @@ app.get('/api/persons/:id', (req, res) => {
 })
 
 app.post('/api/persons', (req, res) => {
-  const newPerson = req.body;
-  newPerson.id = Math.floor(1 + Math.random() * 10000);
+  if (!req.body.name) {
+    return res.status(400).json({error: 'name is missing'});
+  } else if (!req.body.number) {
+    return res.status(400).json({error: 'number is missing'});
+  } else if (persons.some(p => p.name.toLowerCase() === req.body.name.toLowerCase())) {
+    return res.status(400).json({error: 'number already exists'});
+  }
+
+  const newPerson = {
+    name: req.body.name,
+    number: req.body.number,
+    id: Math.floor(1 + Math.random() * 10000)
+  }
+
+
   persons = persons.concat(newPerson);
 
   res.json(newPerson);

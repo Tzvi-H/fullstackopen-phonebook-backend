@@ -3,6 +3,8 @@ let persons = require('./db.json')
 const PORT = 3001;
 const app = express();
 
+app.use(express.json());
+
 app.get('/info', (req, res) => {
   res.send(`Phonebook has info for ${persons.length} people
   <br><br>
@@ -23,6 +25,14 @@ app.get('/api/persons/:id', (req, res) => {
   } else {
     res.status(404).end()
   }
+})
+
+app.post('/api/persons', (req, res) => {
+  const newPerson = req.body;
+  newPerson.id = Math.floor(1 + Math.random() * 10000);
+  persons = persons.concat(newPerson);
+
+  res.json(newPerson);
 })
 
 app.delete('/api/persons/:id', (req, res) => {

@@ -4,8 +4,10 @@ let persons = require('./db.json')
 const PORT = 3001;
 const app = express();
 
+morgan.token('body', (req, res) => JSON.stringify(req.body));
+
 app.use(express.json());
-app.use(morgan('tiny'));
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
 
 app.get('/info', (req, res) => {
   res.send(`Phonebook has info for ${persons.length} people
@@ -35,7 +37,7 @@ app.post('/api/persons', (req, res) => {
   } else if (!req.body.number) {
     return res.status(400).json({error: 'number is missing'});
   } else if (persons.some(p => p.name.toLowerCase() === req.body.name.toLowerCase())) {
-    return res.status(400).json({error: 'number already exists'});
+    return res.status(400).json({error: 'name already exists'});
   }
 
   const newPerson = {

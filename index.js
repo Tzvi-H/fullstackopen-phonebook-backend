@@ -1,9 +1,11 @@
 const express = require('express');
+const morgan = require('morgan');
 let persons = require('./db.json')
 const PORT = 3001;
 const app = express();
 
 app.use(express.json());
+app.use(morgan('tiny'));
 
 app.get('/info', (req, res) => {
   res.send(`Phonebook has info for ${persons.length} people

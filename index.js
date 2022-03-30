@@ -4,7 +4,6 @@ const app = express();
 const Person = require('./models/person');
 const morgan = require('morgan');
 const cors = require('cors');
-let persons = require('./db.json')
 const PORT = process.env.PORT;
 
 morgan.token('body', (req, res) => JSON.stringify(req.body));
@@ -50,11 +49,9 @@ app.post('/api/persons', (req, res) => {
 })
 
 app.delete('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id);
-  
-  persons = persons.filter(p => p.id !== id);
-
-  res.status(204).end();
+  Person
+    .findByIdAndRemove(req.params.id)
+    .then(result => res.status(204).end());
 })
 
 app.listen(PORT, () => {

@@ -14,9 +14,12 @@ app.use(express.json());
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
 
 app.get('/info', (req, res) => {
-  res.send(`Phonebook has info for ${persons.length} people
-  <br><br>
-  ${new Date()}`)
+  Person
+    .count({})
+    .then(result => {
+      res.send(`Phonebook has info for ${result} people
+      <br><br>${new Date()}`)
+    })
 })
 
 app.get('/api/persons', (req, res) => {

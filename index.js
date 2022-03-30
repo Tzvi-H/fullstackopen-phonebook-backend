@@ -1,9 +1,11 @@
+require('dotenv').config();
 const express = require('express');
+const app = express();
+const Person = require('./models/person');
 const morgan = require('morgan');
 const cors = require('cors');
 let persons = require('./db.json')
-const PORT = process.env.PORT || 3001;
-const app = express();
+const PORT = process.env.PORT;
 
 morgan.token('body', (req, res) => JSON.stringify(req.body));
 
@@ -19,19 +21,15 @@ app.get('/info', (req, res) => {
 })
 
 app.get('/api/persons', (req, res) => {
-  res.json(persons);
+  Person
+    .find({})
+    .then(people => res.json(people));
 })
 
 app.get('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id);
-
-  const person = persons.find(p => p.id === id);
-
-  if (person) {
-    res.json(person);
-  } else {
-    res.status(404).end()
-  }
+  Person
+    .findByID(req.params.id)
+    .then(person => res.json(person));
 })
 
 app.post('/api/persons', (req, res) => {
@@ -39,20 +37,16 @@ app.post('/api/persons', (req, res) => {
     return res.status(400).json({error: 'name is missing'});
   } else if (!req.body.number) {
     return res.status(400).json({error: 'number is missing'});
-  } else if (persons.some(p => p.name.toLowerCase() === req.body.name.toLowerCase())) {
-    return res.status(400).json({error: 'name already exists'});
   }
 
-  const newPerson = {
+  const newPerson = new Person({
     name: req.body.name,
     number: req.body.number,
-    id: Math.floor(1 + Math.random() * 10000)
-  }
+  });
 
-
-  persons = persons.concat(newPerson);
-
-  res.json(newPerson);
+  newPerson
+    .save()
+    .then(savedPerson => res.json(savedPerson));
 })
 
 app.delete('/api/persons/:id', (req, res) => {

@@ -39,4 +39,13 @@ Content-Type: application/json
 }
 
 ###
+PUT http://localhost:3001/api/persons/6244a19b782143b035aafac7
+Content-Type: application/json
+
+{
+  "name": "Arto Hellas",
+  "number": "000"
+}
+
+###
 DELETE http://localhost:3001/api/persons/4

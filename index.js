@@ -55,6 +55,18 @@ app.post('/api/persons', (req, res) => {
     .then(savedPerson => res.json(savedPerson));
 })
 
+app.put('/api/persons/:id', (req, res, next) => {
+  const person = {
+    name: req.body.name,
+    number: req.body.number,
+  };
+
+  Person
+    .findByIdAndUpdate(req.params.id, person, { new: true })
+    .then(savedPerson => res.json(savedPerson))
+    .catch(error => next(error));
+})
+
 app.delete('/api/persons/:id', (req, res, next) => {
   Person
     .findByIdAndRemove(req.params.id)

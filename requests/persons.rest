@@ -18,6 +18,7 @@ POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
+  "name": "h",
   "number": "123-2829182"
 }
 
@@ -39,11 +40,11 @@ Content-Type: application/json
 }
 
 ###
-PUT http://localhost:3001/api/persons/6244a19b782143b035aafac7
+PUT http://localhost:3001/api/persons/6245d509eede91acf910e4a1
 Content-Type: application/json
 
 {
-  "name": "Arto Hellas",
+  "name": "aa",
   "number": "000"
 }
 
